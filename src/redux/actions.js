@@ -4,6 +4,12 @@ export const addTodo = (data) => {
         payload: data,
     };
 };
+export const toggleTodoStatus = (todoId) => {
+    return {
+        type: "todoList/toggleTodoStatus",
+        payload: todoId,
+    };
+};
 export const searchFilterChange = (text) => {
     return {
         type: "filters/searchFilterChange",

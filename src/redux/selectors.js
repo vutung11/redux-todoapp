@@ -1,4 +1,5 @@
-import { createSelector } from "reselect";
+import { createSelector } from "@reduxjs/toolkit";
+import { STATUS } from "../constants/constans";
 export const searchTextSelector = (state) => state.filters.search;
 export const statusFilterChange = (state) => state.filters.status;
 export const todoListSelector = (state) => state.todoList;
@@ -10,8 +11,11 @@ export const todosRomainingSelector = createSelector(
     searchTextSelector,
     prioritiesFilterChange,
     (todoList, status, searchText, priorities) => {
+        if (!status) {
+            return todoList;
+        }
         return todoList.filter((todo) => {
-            if (status === "All") {
+            if (status === STATUS.ALL) {
                 return priorities.length
                     ? todo.name.includes(searchText) &&
                           priorities.includes(todo.priority)
@@ -19,7 +23,9 @@ export const todosRomainingSelector = createSelector(
             }
             return (
                 todo.name.includes(searchText) &&
-                (status === "Completed" ? todo.completed : !todo.completed) &&
+                (status === STATUS.COMPLETED
+                    ? todo.completed
+                    : !todo.completed) &&
                 (priorities.length ? priorities.includes(todo.priority) : true)
             );
         });
